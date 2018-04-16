@@ -2,7 +2,7 @@ program coffee_machine;
 
 uses
   Vcl.Forms,
-  MainForm in '..\MainForm.pas' {Form1};
+  MainForm in 'MainForm.pas' {Form1};
 
 {$R *.res}
 
