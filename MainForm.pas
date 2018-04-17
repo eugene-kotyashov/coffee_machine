@@ -34,8 +34,10 @@ type
     Overview2: TMenuItem;
     Cleaning1: TMenuItem;
     Repair1: TMenuItem;
+    Search1: TMenuItem;
+    searchText: TEdit;
+    searchColText: TEdit;
     procedure Button1Click(Sender: TObject);
-    procedure Button2Click(Sender: TObject);
     procedure atCustomer2Click(Sender: TObject);
     procedure List1Click(Sender: TObject);
     procedure Add1Click(Sender: TObject);
@@ -45,6 +47,7 @@ type
     procedure Overview2Click(Sender: TObject);
     procedure Cleaning1Click(Sender: TObject);
     procedure ZQuery1AfterOpen(DataSet: TDataSet);
+    procedure Search1Click(Sender: TObject);
   private
     procedure SetupDBGrid;
     { Private declarations }
@@ -146,24 +149,13 @@ end;
 
 procedure TForm1.Button1Click(Sender: TObject);
 begin
-  Caption := 'Connecting to '+ ZConnection1.Database;
-  try
-    ZConnection1.Properties.Add('foreign_keys=TRUE');
-    ZConnection1.Connect;
-  except on E : Exception do
-    ShowMessage(E.Message);
-  end;
+  ZQuery1.Close;
+  ZQuery1.SQL.Clear;
+  ZQuery1.SQL.Add(
+  'select    ');
+  ZQuery1.Open;
 end;
 
-procedure TForm1.Button2Click(Sender: TObject);
-begin
-  try
-  ZConnection1.Disconnect;
-  except
-  on E : Exception do
-    ShowMessage(E.Message);
-  end;
-end;
 
 
 procedure TForm1.Cleaning1Click(Sender: TObject);
@@ -211,8 +203,21 @@ begin
   ZQuery1.Close;
   ZQuery1.SQL.Clear;
   ZQuery1.SQL.Add(
-  'select Model from customer');
+  'select * from customer');
   ZQuery1.Open;
+end;
+
+procedure TForm1.Search1Click(Sender: TObject);
+var
+  sqlStr : string;
+begin
+  sqlStr := 'select * from customer where ' +
+      searchColText.Text + '=' + QuotedStr(searchText.Text);
+  ZQuery1.Close;
+  ZQuery1.SQL.Clear;
+  ZQuery1.SQL.Add(sqlStr);
+  ZQuery1.Open;
+
 end;
 
 procedure TForm1.SetupDBGrid;

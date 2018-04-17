@@ -38,6 +38,22 @@ object Form1: TForm1
     DataSource = DataSource1
     TabOrder = 1
   end
+  object searchText: TEdit
+    Left = 176
+    Top = 72
+    Width = 121
+    Height = 21
+    TabOrder = 2
+    Text = 'searchText'
+  end
+  object searchColText: TEdit
+    Left = 24
+    Top = 72
+    Width = 121
+    Height = 21
+    TabOrder = 3
+    Text = 'searchColText'
+  end
   object ZQuery1: TZQuery
     Connection = ZConnection1
     AfterOpen = ZQuery1AfterOpen
@@ -98,6 +114,10 @@ object Form1: TForm1
       object Overview2: TMenuItem
         Caption = 'Overview'
         OnClick = Overview2Click
+      end
+      object Search1: TMenuItem
+        Caption = 'Search'
+        OnClick = Search1Click
       end
     end
     object Supplier1: TMenuItem
