@@ -27,9 +27,7 @@ type
     Overview1: TMenuItem;
     atCustomer1: TMenuItem;
     atCustomer2: TMenuItem;
-    ZQuery2: TZQuery;
     List1: TMenuItem;
-    Add1: TMenuItem;
     DBNavigator1: TDBNavigator;
     Overview2: TMenuItem;
     Cleaning1: TMenuItem;
@@ -37,6 +35,11 @@ type
     Search1: TMenuItem;
     searchText: TEdit;
     searchColText: TEdit;
+    Edit1: TMenuItem;
+    Overview3: TMenuItem;
+    Ingrediants1: TMenuItem;
+    Edit2: TMenuItem;
+    Search2: TMenuItem;
     procedure Button1Click(Sender: TObject);
     procedure atCustomer2Click(Sender: TObject);
     procedure List1Click(Sender: TObject);
@@ -48,8 +51,16 @@ type
     procedure Cleaning1Click(Sender: TObject);
     procedure ZQuery1AfterOpen(DataSet: TDataSet);
     procedure Search1Click(Sender: TObject);
+    procedure Edit1Click(Sender: TObject);
+    procedure Overview3Click(Sender: TObject);
+    procedure Ingrediants1Click(Sender: TObject);
+    procedure Edit2Click(Sender: TObject);
+    procedure Search2Click(Sender: TObject);
   private
     procedure SetupDBGrid;
+    procedure ListDBTable(name : string);
+    procedure ExecSearchQuery(tableName:string);
+    procedure DisableEdit;
     { Private declarations }
   public
     { Public declarations }
@@ -110,6 +121,12 @@ begin
   end;
 end;
 
+procedure TForm1.DisableEdit;
+begin
+  DBNavigator1.Enabled := false;
+  DbGrid1.ReadOnly := true;
+end;
+
 procedure TForm1.Add1Click(Sender: TObject);
 begin
   ZQuery1.Close;
@@ -120,17 +137,11 @@ begin
     ShowMessage(E.Message);
   end;
   SetupDBGrid;
-
 end;
 
 procedure TForm1.atCustomer1Click(Sender: TObject);
 begin
-  ZQuery1.Close;
-  ZQuery1.SQL.Clear;
-  ZQuery1.SQL.Add(
-  'select * from coffemachine');
-  ZQuery1.Open;
-  SetupDBGrid;
+  ListDBTable('coffemachine');
 end;
 
 procedure TForm1.atCustomer2Click(Sender: TObject);
@@ -168,6 +179,18 @@ begin
   ZQuery1.Open;
 end;
 
+procedure TForm1.Edit1Click(Sender: TObject);
+begin
+  DBNavigator1.Enabled := true;
+  DbGrid1.ReadOnly := false;
+end;
+
+procedure TForm1.Edit2Click(Sender: TObject);
+begin
+  DBNavigator1.Enabled := true;
+  DbGrid1.ReadOnly := false;
+end;
+
 procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   try
@@ -189,8 +212,15 @@ begin
   end;
 end;
 
+procedure TForm1.Ingrediants1Click(Sender: TObject);
+begin
+  ListDBTable('ingredients');
+end;
+
 procedure TForm1.List1Click(Sender: TObject);
 begin
+  DBNavigator1.Enabled := false;
+//  DBNavigator1.se
   ZQuery1.Close;
   ZQuery1.SQL.Clear;
   ZQuery1.SQL.Add(
@@ -198,26 +228,47 @@ begin
   ZQuery1.Open;
 end;
 
-procedure TForm1.Overview2Click(Sender: TObject);
+procedure TForm1.ListDBTable(name : string);
 begin
+  DBNavigator1.Enabled := true;
+  DbGrid1.ReadOnly := false;
   ZQuery1.Close;
   ZQuery1.SQL.Clear;
   ZQuery1.SQL.Add(
-  'select * from customer');
+  'select * from '+ name);
   ZQuery1.Open;
 end;
 
-procedure TForm1.Search1Click(Sender: TObject);
+procedure TForm1.Overview2Click(Sender: TObject);
+begin
+  ListDBTable('customer');
+end;
+
+procedure TForm1.Overview3Click(Sender: TObject);
+begin
+  ListDBTable('drink');
+end;
+
+procedure TForm1.ExecSearchQuery(tableName : string);
 var
   sqlStr : string;
 begin
-  sqlStr := 'select * from customer where ' +
-      searchColText.Text + '=' + QuotedStr(searchText.Text);
+  sqlStr := 'select * from '+ tableName +' where ' +
+      searchColText.Text + '=' + quotedstr(searchText.Text);
   ZQuery1.Close;
   ZQuery1.SQL.Clear;
   ZQuery1.SQL.Add(sqlStr);
   ZQuery1.Open;
+end;
 
+procedure TForm1.Search1Click(Sender: TObject);
+begin
+  ExecSearchQuery('customer');
+end;
+
+procedure TForm1.Search2Click(Sender: TObject);
+begin
+    ExecSearchQuery('drink');
 end;
 
 procedure TForm1.SetupDBGrid;

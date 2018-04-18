@@ -3,7 +3,7 @@ object Form1: TForm1
   Top = 0
   Caption = 'Form1'
   ClientHeight = 338
-  ClientWidth = 785
+  ClientWidth = 530
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -18,11 +18,12 @@ object Form1: TForm1
   TextHeight = 13
   object DBGrid1: TDBGrid
     Left = 0
-    Top = 131
-    Width = 785
+    Top = 25
+    Width = 530
     Height = 207
-    Align = alBottom
+    Align = alTop
     DataSource = DataSource1
+    ReadOnly = True
     TabOrder = 0
     TitleFont.Charset = DEFAULT_CHARSET
     TitleFont.Color = clWindowText
@@ -31,24 +32,29 @@ object Form1: TForm1
     TitleFont.Style = []
   end
   object DBNavigator1: TDBNavigator
-    Left = 16
-    Top = 16
-    Width = 240
+    Left = 0
+    Top = 0
+    Width = 530
     Height = 25
     DataSource = DataSource1
+    Align = alTop
+    Enabled = False
     TabOrder = 1
+    ExplicitLeft = 8
+    ExplicitTop = 100
+    ExplicitWidth = 240
   end
   object searchText: TEdit
-    Left = 176
-    Top = 72
+    Left = 151
+    Top = 254
     Width = 121
     Height = 21
     TabOrder = 2
     Text = 'searchText'
   end
   object searchColText: TEdit
-    Left = 24
-    Top = 72
+    Left = 8
+    Top = 254
     Width = 121
     Height = 21
     TabOrder = 3
@@ -58,7 +64,7 @@ object Form1: TForm1
     Connection = ZConnection1
     AfterOpen = ZQuery1AfterOpen
     Params = <>
-    Left = 664
+    Left = 368
     Top = 16
   end
   object ZConnection1: TZConnection
@@ -73,16 +79,16 @@ object Form1: TForm1
     Password = ''
     Protocol = 'sqlite-3'
     LibraryLocation = 'sqlite3.dll'
-    Left = 744
+    Left = 448
     Top = 16
   end
   object DataSource1: TDataSource
     DataSet = ZQuery1
-    Left = 704
+    Left = 408
     Top = 16
   end
   object MainMenu1: TMainMenu
-    Left = 624
+    Left = 328
     Top = 8
     object CoffeeMachine1: TMenuItem
       Caption = 'CoffeeMachine'
@@ -104,9 +110,9 @@ object Form1: TForm1
           OnClick = atCustomer2Click
         end
       end
-      object Add1: TMenuItem
-        Caption = 'Add'
-        OnClick = Add1Click
+      object Edit1: TMenuItem
+        Caption = 'Edit'
+        OnClick = Edit1Click
       end
     end
     object Cus1: TMenuItem
@@ -125,6 +131,22 @@ object Form1: TForm1
     end
     object Drinks1: TMenuItem
       Caption = 'Drinks'
+      object Overview3: TMenuItem
+        Caption = 'List'
+        OnClick = Overview3Click
+      end
+      object Ingrediants1: TMenuItem
+        Caption = 'Ingredients'
+        OnClick = Ingrediants1Click
+      end
+      object Search2: TMenuItem
+        Caption = 'Search'
+        OnClick = Search2Click
+      end
+      object Edit2: TMenuItem
+        Caption = 'Edit'
+        OnClick = Edit2Click
+      end
     end
     object Statistics1: TMenuItem
       Caption = 'Statistics'
@@ -144,11 +166,5 @@ object Form1: TForm1
         Caption = 'Repair'
       end
     end
-  end
-  object ZQuery2: TZQuery
-    Connection = ZConnection1
-    Params = <>
-    Left = 576
-    Top = 8
   end
 end
