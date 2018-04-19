@@ -40,6 +40,8 @@ type
     Ingrediants1: TMenuItem;
     Edit2: TMenuItem;
     Search2: TMenuItem;
+    Selectionbydrinks1: TMenuItem;
+    Selectionbycustomer1: TMenuItem;
     procedure Button1Click(Sender: TObject);
     procedure atCustomer2Click(Sender: TObject);
     procedure List1Click(Sender: TObject);
@@ -56,10 +58,13 @@ type
     procedure Ingrediants1Click(Sender: TObject);
     procedure Edit2Click(Sender: TObject);
     procedure Search2Click(Sender: TObject);
+    procedure Selectionbydrinks1Click(Sender: TObject);
+    procedure Selectionbycustomer1Click(Sender: TObject);
   private
     procedure SetupDBGrid;
     procedure ListDBTable(name : string);
     procedure ExecSearchQuery(tableName:string);
+    procedure OpenQuery(query : string);
     procedure DisableEdit;
     { Private declarations }
   public
@@ -119,6 +124,15 @@ begin
       ds.EnableControls;
     end;
   end;
+end;
+
+procedure TForm1.OpenQuery(query : string);
+begin
+  ZQuery1.Close;
+  ZQuery1.SQL.Clear;
+  ZQuery1.SQL.Add(query);
+  ZQuery1.Open;
+  SetupDBGrid;
 end;
 
 procedure TForm1.DisableEdit;
@@ -232,11 +246,8 @@ procedure TForm1.ListDBTable(name : string);
 begin
   DBNavigator1.Enabled := true;
   DbGrid1.ReadOnly := false;
-  ZQuery1.Close;
-  ZQuery1.SQL.Clear;
-  ZQuery1.SQL.Add(
-  'select * from '+ name);
-  ZQuery1.Open;
+  OpenQuery('select * from '+ name);
+
 end;
 
 procedure TForm1.Overview2Click(Sender: TObject);
@@ -269,6 +280,21 @@ end;
 procedure TForm1.Search2Click(Sender: TObject);
 begin
     ExecSearchQuery('drink');
+end;
+
+procedure TForm1.Selectionbycustomer1Click(Sender: TObject);
+begin
+  OpenQuery('select customer.Name, sum(sale.quantity) as `total sale count` from coffemachine '+
+	'inner join customer on coffemachine.customer_id = customer.id '+
+	'inner join sale on sale.machine_id = coffemachine.id '+
+  'group by customer.id order by `total sale count` desc ');
+end;
+
+procedure TForm1.Selectionbydrinks1Click(Sender: TObject);
+begin
+  OpenQuery('select Name, sale.date, sum(sale.quantity) as ''total sale'' from drink'+
+	' inner join sale on sale.drink_id = drink.id'+
+  ' group by drink.id');
 end;
 
 procedure TForm1.SetupDBGrid;

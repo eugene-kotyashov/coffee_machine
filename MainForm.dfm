@@ -40,9 +40,6 @@ object Form1: TForm1
     Align = alTop
     Enabled = False
     TabOrder = 1
-    ExplicitLeft = 8
-    ExplicitTop = 100
-    ExplicitWidth = 240
   end
   object searchText: TEdit
     Left = 151
@@ -150,6 +147,14 @@ object Form1: TForm1
     end
     object Statistics1: TMenuItem
       Caption = 'Statistics'
+      object Selectionbydrinks1: TMenuItem
+        Caption = 'Selection by drinks'
+        OnClick = Selectionbydrinks1Click
+      end
+      object Selectionbycustomer1: TMenuItem
+        Caption = 'Selection by customer'
+        OnClick = Selectionbycustomer1Click
+      end
     end
     object Products1: TMenuItem
       Caption = 'Products'
