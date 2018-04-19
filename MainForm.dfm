@@ -1,7 +1,7 @@
 object Form1: TForm1
   Left = 0
   Top = 0
-  Caption = 'Form1'
+  Caption = 'Coffe machine'
   ClientHeight = 338
   ClientWidth = 530
   Color = clBtnFace
@@ -16,6 +16,20 @@ object Form1: TForm1
   OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
+  object Label1: TLabel
+    Left = 8
+    Top = 248
+    Width = 98
+    Height = 13
+    Caption = 'Search column name'
+  end
+  object Label2: TLabel
+    Left = 151
+    Top = 251
+    Width = 56
+    Height = 13
+    Caption = 'Search text'
+  end
   object DBGrid1: TDBGrid
     Left = 0
     Top = 25
@@ -43,7 +57,7 @@ object Form1: TForm1
   end
   object searchText: TEdit
     Left = 151
-    Top = 254
+    Top = 270
     Width = 121
     Height = 21
     TabOrder = 2
@@ -51,7 +65,7 @@ object Form1: TForm1
   end
   object searchColText: TEdit
     Left = 8
-    Top = 254
+    Top = 270
     Width = 121
     Height = 21
     TabOrder = 3
@@ -61,8 +75,8 @@ object Form1: TForm1
     Connection = ZConnection1
     AfterOpen = ZQuery1AfterOpen
     Params = <>
-    Left = 368
-    Top = 16
+    Left = 376
+    Top = 248
   end
   object ZConnection1: TZConnection
     ControlsCodePage = cCP_UTF16
@@ -71,22 +85,22 @@ object Form1: TForm1
       'controls_cp=CP_UTF16')
     HostName = ''
     Port = 0
-    Database = 'C:\Users\asus\Documents\sql\coffee_machine\coffee_light_ex.db'
+    Database = 'coffee_light_ex.db'
     User = ''
     Password = ''
     Protocol = 'sqlite-3'
     LibraryLocation = 'sqlite3.dll'
-    Left = 448
-    Top = 16
+    Left = 456
+    Top = 248
   end
   object DataSource1: TDataSource
     DataSet = ZQuery1
-    Left = 408
-    Top = 16
+    Left = 416
+    Top = 248
   end
   object MainMenu1: TMainMenu
-    Left = 328
-    Top = 8
+    Left = 344
+    Top = 248
     object CoffeeMachine1: TMenuItem
       Caption = 'CoffeeMachine'
       object Manufacturer1: TMenuItem
@@ -122,19 +136,31 @@ object Form1: TForm1
         Caption = 'Search'
         OnClick = Search1Click
       end
+      object Edit3: TMenuItem
+        Caption = 'Edit'
+        OnClick = Edit3Click
+      end
     end
     object Supplier1: TMenuItem
       Caption = 'Supplier'
+      object List3: TMenuItem
+        Caption = 'List'
+        OnClick = List3Click
+      end
+      object Search3: TMenuItem
+        Caption = 'Search'
+        OnClick = Search3Click
+      end
+      object Edit6: TMenuItem
+        Caption = 'Edit'
+        OnClick = Edit6Click
+      end
     end
     object Drinks1: TMenuItem
       Caption = 'Drinks'
       object Overview3: TMenuItem
         Caption = 'List'
         OnClick = Overview3Click
-      end
-      object Ingrediants1: TMenuItem
-        Caption = 'Ingredients'
-        OnClick = Ingrediants1Click
       end
       object Search2: TMenuItem
         Caption = 'Search'
@@ -148,17 +174,27 @@ object Form1: TForm1
     object Statistics1: TMenuItem
       Caption = 'Statistics'
       object Selectionbydrinks1: TMenuItem
-        Caption = 'Selection by drinks'
-        OnClick = Selectionbydrinks1Click
+        Caption = 'Selection by machine'
+        OnClick = SelectionbyMachineClick
       end
       object Selectionbycustomer1: TMenuItem
         Caption = 'Selection by customer'
         OnClick = Selectionbycustomer1Click
       end
+      object Selectionbydrink1: TMenuItem
+        Caption = 'Selection by drink'
+        OnClick = Selectionbydrink1Click
+      end
     end
     object Products1: TMenuItem
       Caption = 'Products'
-      object M1: TMenuItem
+      object Ingrediants1: TMenuItem
+        Caption = 'List'
+        OnClick = Ingrediants1Click
+      end
+      object Edit4: TMenuItem
+        Caption = 'Edit'
+        OnClick = Edit4Click
       end
     end
     object Maintenance1: TMenuItem
@@ -167,8 +203,16 @@ object Form1: TForm1
         Caption = 'Cleaning'
         OnClick = Cleaning1Click
       end
-      object Repair1: TMenuItem
-        Caption = 'Repair'
+    end
+    object Repair1: TMenuItem
+      Caption = 'Repair'
+      object List2: TMenuItem
+        Caption = 'List by coffemachine'
+        OnClick = List2Click
+      end
+      object Edit5: TMenuItem
+        Caption = 'Edit'
+        OnClick = Edit5Click
       end
     end
   end

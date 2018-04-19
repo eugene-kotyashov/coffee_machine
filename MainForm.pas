@@ -21,7 +21,6 @@ type
     Drinks1: TMenuItem;
     Statistics1: TMenuItem;
     Products1: TMenuItem;
-    M1: TMenuItem;
     Maintenance1: TMenuItem;
     Manufacturer1: TMenuItem;
     Overview1: TMenuItem;
@@ -42,6 +41,16 @@ type
     Search2: TMenuItem;
     Selectionbydrinks1: TMenuItem;
     Selectionbycustomer1: TMenuItem;
+    Selectionbydrink1: TMenuItem;
+    Edit3: TMenuItem;
+    Edit4: TMenuItem;
+    List2: TMenuItem;
+    Edit5: TMenuItem;
+    Label1: TLabel;
+    Label2: TLabel;
+    List3: TMenuItem;
+    Search3: TMenuItem;
+    Edit6: TMenuItem;
     procedure Button1Click(Sender: TObject);
     procedure atCustomer2Click(Sender: TObject);
     procedure List1Click(Sender: TObject);
@@ -58,14 +67,23 @@ type
     procedure Ingrediants1Click(Sender: TObject);
     procedure Edit2Click(Sender: TObject);
     procedure Search2Click(Sender: TObject);
-    procedure Selectionbydrinks1Click(Sender: TObject);
+    procedure SelectionbyMachineClick(Sender: TObject);
     procedure Selectionbycustomer1Click(Sender: TObject);
+    procedure Selectionbydrink1Click(Sender: TObject);
+    procedure Edit3Click(Sender: TObject);
+    procedure Edit4Click(Sender: TObject);
+    procedure List2Click(Sender: TObject);
+    procedure Edit5Click(Sender: TObject);
+    procedure List3Click(Sender: TObject);
+    procedure Search3Click(Sender: TObject);
+    procedure Edit6Click(Sender: TObject);
   private
     procedure SetupDBGrid;
     procedure ListDBTable(name : string);
     procedure ExecSearchQuery(tableName:string);
     procedure OpenQuery(query : string);
     procedure DisableEdit;
+    procedure EnableEdit;
     { Private declarations }
   public
     { Public declarations }
@@ -124,6 +142,12 @@ begin
       ds.EnableControls;
     end;
   end;
+end;
+
+procedure TForm1.EnableEdit;
+begin
+  DBNavigator1.Enabled := true;
+  DbGrid1.ReadOnly := false;
 end;
 
 procedure TForm1.OpenQuery(query : string);
@@ -188,21 +212,50 @@ begin
   ZQuery1.Close;
   ZQuery1.SQL.Clear;
   ZQuery1.SQL.Add(
-  'select    id,Model,cleanDate,leaseRate,'+
-'(julianday(date(''now'')) - julianday(date(cleanDate)) > 30) as NeedToClean from coffemachine;');
+  'select id,Model,cleanDate,leaseRate'+
+' from coffemachine where (julianday(date(''now'')) - julianday(date(cleanDate)) > 30)');
   ZQuery1.Open;
+  DisableEdit;
 end;
 
 procedure TForm1.Edit1Click(Sender: TObject);
 begin
+  ListDBTable('coffemachine');
   DBNavigator1.Enabled := true;
   DbGrid1.ReadOnly := false;
 end;
 
 procedure TForm1.Edit2Click(Sender: TObject);
 begin
+  ListDBTable('drink');
   DBNavigator1.Enabled := true;
   DbGrid1.ReadOnly := false;
+end;
+
+procedure TForm1.Edit3Click(Sender: TObject);
+begin
+  ListDBTable('customer');
+  DBNavigator1.Enabled := true;
+  DbGrid1.ReadOnly := false;
+end;
+
+procedure TForm1.Edit4Click(Sender: TObject);
+begin
+  ListDBTable('ingredients');
+  DBNavigator1.Enabled := true;
+  DbGrid1.ReadOnly := false;
+end;
+
+procedure TForm1.Edit5Click(Sender: TObject);
+begin
+  ListDBTable('repairParts');
+  EnableEdit;
+end;
+
+procedure TForm1.Edit6Click(Sender: TObject);
+begin
+  ListDBTable('supplier');
+  EnableEdit;
 end;
 
 procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -234,7 +287,7 @@ end;
 procedure TForm1.List1Click(Sender: TObject);
 begin
   DBNavigator1.Enabled := false;
-//  DBNavigator1.se
+  DbGrid1.ReadOnly := true;
   ZQuery1.Close;
   ZQuery1.SQL.Clear;
   ZQuery1.SQL.Add(
@@ -242,12 +295,22 @@ begin
   ZQuery1.Open;
 end;
 
+procedure TForm1.List2Click(Sender: TObject);
+begin
+  OpenQuery('select coffemachine.Model, repairparts.date, repairParts.description from coffemachine '+
+	 'inner join repairParts on repairParts.machine_id = coffemachine.id');
+  DisableEdit;
+end;
+
+procedure TForm1.List3Click(Sender: TObject);
+begin
+  ListDBTable('supplier');
+end;
+
 procedure TForm1.ListDBTable(name : string);
 begin
-  DBNavigator1.Enabled := true;
-  DbGrid1.ReadOnly := false;
   OpenQuery('select * from '+ name);
-
+  DisableEdit;
 end;
 
 procedure TForm1.Overview2Click(Sender: TObject);
@@ -270,6 +333,7 @@ begin
   ZQuery1.SQL.Clear;
   ZQuery1.SQL.Add(sqlStr);
   ZQuery1.Open;
+  DisableEdit;
 end;
 
 procedure TForm1.Search1Click(Sender: TObject);
@@ -282,19 +346,31 @@ begin
     ExecSearchQuery('drink');
 end;
 
-procedure TForm1.Selectionbycustomer1Click(Sender: TObject);
+procedure TForm1.Search3Click(Sender: TObject);
 begin
-  OpenQuery('select customer.Name, sum(sale.quantity) as `total sale count` from coffemachine '+
-	'inner join customer on coffemachine.customer_id = customer.id '+
-	'inner join sale on sale.machine_id = coffemachine.id '+
-  'group by customer.id order by `total sale count` desc ');
+  ExecSearchQuery('supplier');
 end;
 
-procedure TForm1.Selectionbydrinks1Click(Sender: TObject);
+procedure TForm1.Selectionbycustomer1Click(Sender: TObject);
 begin
-  OpenQuery('select Name, sale.date, sum(sale.quantity) as ''total sale'' from drink'+
-	' inner join sale on sale.drink_id = drink.id'+
-  ' group by drink.id');
+  OpenQuery('select customer.Name, sum(sale.quantity) as `total sales` from coffemachine '+
+	'inner join customer on coffemachine.customer_id = customer.id '+
+	'inner join sale on sale.machine_id = coffemachine.id '+
+  'group by customer.id order by `total sales` desc ');
+end;
+
+procedure TForm1.Selectionbydrink1Click(Sender: TObject);
+begin
+  OpenQuery('select drink.name, sum(sale.quantity) as `total sales` from drink '+
+	'inner join sale on sale.drink_id = drink.id '+
+  'group by drink.id');
+end;
+
+procedure TForm1.SelectionbyMachineClick(Sender: TObject);
+begin
+  OpenQuery('select coffemachine.Model, sum(sale.quantity) as `total sales` from coffemachine'+
+	' inner join sale on sale.machine_id = coffemachine.id'+
+  ' group by coffemachine.id');
 end;
 
 procedure TForm1.SetupDBGrid;
