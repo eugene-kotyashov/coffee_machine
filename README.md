@@ -1,2 +1,2 @@
 # coffee_machine
-Simple SQLite database based e-commerce application
+Simple SQLite database based accounting desktop application
